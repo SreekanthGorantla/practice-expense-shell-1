@@ -44,7 +44,7 @@ LOG_FILE_NAME="$LOGS_FOLDER/$LOG_FILE-$TIMESTAMP.log"
 #########################################################
 # create or replace log file directory
 #########################################################
-mkdir -p $LOGS_FOLDER  &>> $LOG_FILE_NAME
+mkdir -p $LOGS_FOLDER
 
 echo "Script started executing at: $TIMESTAMP" &>> $LOG_FILE_NAME
 
@@ -68,15 +68,14 @@ VALIDATE $? "Installing Nodejs"
 #########################################################
 # Add expense user
 #########################################################
-id expense &>> $LOG_FILE_NAME
+id expense  &>> $LOG_FILE_NAME
 if [ $? -ne 0 ]
 then
     useradd expense &>> $LOG_FILE_NAME
-    VALIDATE $? "Adding Expense user"
+    VALIDATE $? "Adding expense user"
 else
     echo -e "Expense user already exists ... $Y SKIPPING $N"
 fi
-
 #########################################################
 # Create app directory
 #########################################################
@@ -93,7 +92,7 @@ VALIDATE $? "Downloading backend"
 # Remove everything from /app folder
 #########################################################
 cd /app
-rm -rf /app/* &>> $LOG_FILE_NAME
+rm -rf /app/*
 
 #########################################################
 # Unzip the backend
