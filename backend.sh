@@ -45,12 +45,12 @@ LOG_FILE_NAME="$LOGS_FOLDER/$LOG_FILE-$TIMESTAMP.log"
 #########################################################
 # create or replace log file directory
 #########################################################
-echo ==========================================================================
+echo "=========================================================================="
 mkdir -p $LOGS_FOLDER  &>> $LOG_FILE_NAME
-echo ==========================================================================
+echo "=========================================================================="
 
 echo "Script started executing at: $TIMESTAMP" &>> $LOG_FILE_NAME
-echo ==========================================================================
+echo "=========================================================================="
 CHECK_ROOT
 
 #########################################################
@@ -83,13 +83,13 @@ else
     echo -e "Expense user already exists ... $Y SKIPPING $N"
 fi
 echo
-echo=========================================
+echo "========================================="
 #########################################################
 # Create app directory
 #########################################################
 mkdir -p /app &>> $LOG_FILE_NAME
 VALIDATE $? "Creating app directory"
-echo ========================================
+echo "========================================="
 echo 
 #########################################################
 # Downloading backend
@@ -97,13 +97,13 @@ echo
 curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip &>> $LOG_FILE_NAME
 VALIDATE $? "Downloading backend"
 echo
-echo =======================================
+echo "========================================="
 #########################################################
 # Remove everything from /app folder
 #########################################################
 cd /app
 rm -rf /app/* &>> $LOG_FILE_NAME
-echo =======================================
+echo "========================================="
 echo
 #########################################################
 # Unzip the backend
@@ -124,25 +124,25 @@ echo
 ##########################################################
 cp /home/ec2-user/practice-expense-shell-1/backend.service /etc/systemd/system/backend.service
 echo
-echo =========================================
+echo "========================================="
 ##########################################################
 # Prepare mysql for backed
 ##########################################################
 dnf install mysql -y &>> $LOG_FILE_NAME
 VALIDATE $? "Install mysql"
 echo
-echo =========================================
-mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -pExpenseApp@1 < /app/schema/backend.sql &>> $LOG_FILE_NAME
+echo "========================================="
+mysql -h mysql.sreeaws.space -uroot -pExpenseApp@1 < /app/schema/backend.sql &>> $LOG_FILE_NAME
 VALIDATE $? "Setting up transactions schema"
 echo
-echo =========================================
+echo "========================================="
 systemctl daemon-reload &>> $LOG_FILE_NAME
 VALIDATE $? "Deamon Reload"
 echo
-echo =========================================
+echo "========================================="
 systemctl enable backend &>> $LOG_FILE_NAME 
 VALIDATE $? "Enabling backend"
 echo
-echo =========================================
+echo "========================================="
 systemctl restart backend &>> $LOG_FILE_NAME
 VALIDATE $? "Starting backend"
