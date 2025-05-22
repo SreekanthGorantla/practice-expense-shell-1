@@ -91,9 +91,12 @@ VALIDATE $? "Downloading backend"
 #########################################################
 # Remove everything from /app folder
 #########################################################
+echo
+echo =====================================================
 cd /app
 rm -rf /app/*
-
+echo
+echo =====================================================
 #########################################################
 # Unzip the backend
 #########################################################
@@ -125,6 +128,7 @@ VALIDATE $? "Deamon Reload"
 
 systemctl enable backend &>> $LOG_FILE_NAME 
 VALIDATE $? "Enabling backend"
-
+echo
+echo =====================================================
 systemctl restart backend &>> $LOG_FILE_NAME
 VALIDATE $? "Starting backend"
