@@ -3,7 +3,7 @@
 #########################################################
 # check user
 #########################################################
-USERID=$(id -u)
+USERID=$(id -u) &>> $LOG_FILE_NAME
 
 #########################################################
 # Add colours to the text
@@ -14,7 +14,7 @@ Y="\e[33m"
 N="\e[0m"
 
 #########################################################
-# 
+# Function to validate
 #########################################################
 VALIDATE(){
     if [ $1 -ne 0 ]
@@ -42,7 +42,7 @@ LOG_FILE=$(echo $0 | cut -d "." -f1)
 TIMESTAMP=$(date +%Y-%m-%d-%H-%M-%S)
 LOG_FILE_NAME="$LOGS_FOLDER/$LOG_FILE-$TIMESTAMP.log"
 
-mkdir -p $LOGS_FOLDER
+mkdir -p $LOGS_FOLDER  &>> $LOG_FILE_NAME
 echo "Script started executing at: $TIMESTAMP" &>> $LOG_FILE_NAME
 
 CHECK_ROOT
