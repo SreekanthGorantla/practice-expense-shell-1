@@ -45,32 +45,30 @@ LOG_FILE_NAME="$LOGS_FOLDER/$LOG_FILE-$TIMESTAMP.log"
 # create or replace log file directory
 #########################################################
 mkdir -p $LOGS_FOLDER
-echo
 echo =====================================================
 echo "Script started executing at: $TIMESTAMP" &>> $LOG_FILE_NAME
-echo
 echo =====================================================
-CHECK_ROOT
-echo
+CHECK_ROOT &>> $LOG_FILE_NAME
 echo =====================================================
+
 #########################################################
 # disable,enable nodejs version
 #########################################################
 dnf module disable nodejs -y &>> $LOG_FILE_NAME
 VALIDATE $? "Disabling existing default Nodejs"
-echo
 echo =====================================================
+
 dnf module enable nodejs:20 -y &>> $LOG_FILE_NAME
 VALIDATE $? "Enabling default Nodejs latest version"
-echo
 echo =====================================================
+
 #########################################################
 # Installing Nodejs
 #########################################################
 dnf install nodejs -y  &>> $LOG_FILE_NAME
 VALIDATE $? "Installing Nodejs"
-echo
 echo =====================================================
+
 #########################################################
 # Add expense user
 #########################################################
@@ -82,69 +80,68 @@ then
 else
     echo -e "Expense user already exists ... $Y SKIPPING $N"
 fi
-echo
 echo =====================================================
+
 #########################################################
 # Create app directory
 #########################################################
 mkdir -p /app &>> $LOG_FILE_NAME
 VALIDATE $? "Creating app directory"
-echo
 echo =====================================================
+
 #########################################################
 # Downloading backend
 #########################################################
 curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip &>> $LOG_FILE_NAME
 VALIDATE $? "Downloading backend"
-echo
 echo =====================================================
+
 #########################################################
 # Remove everything from /app folder
 #########################################################
 cd /app
 rm -rf /app/*
-echo
 echo =====================================================
+
 #########################################################
 # Unzip the backend
 #########################################################
 unzip /tmp/backend.zip &>> $LOG_FILE_NAME
 VALIDATE $? "Unzip backend"
-echo
 echo =====================================================
+
 #########################################################
 # Install npm
 #########################################################
 npm install &>> $LOG_FILE_NAME
 VALIDATE $? "Installing dependencies"
-echo
 echo =====================================================
-##########################################################
+
+#############################################################################################
 # copy backend.service from local to /etc/systemd location
-##########################################################
+#############################################################################################
 cp /home/ec2-user/practice-expense-shell-1/backend.service /etc/systemd/system/backend.service
-echo
 echo =====================================================
+
 ##########################################################
 # Prepare mysql for backed
 ##########################################################
 dnf install mysql -y &>> $LOG_FILE_NAME
 VALIDATE $? "Install mysql"
-echo
 echo =====================================================
+
 mysql -h mysql.sreeaws.space -uroot -pExpenseApp@1 < /app/schema/backend.sql &>> $LOG_FILE_NAME
 VALIDATE $? "Setting up transactions schema"
-echo
 echo =====================================================
+
 systemctl daemon-reload &>> $LOG_FILE_NAME
 VALIDATE $? "Deamon Reload"
-echo
 echo =====================================================
+
 systemctl enable backend &>> $LOG_FILE_NAME 
 VALIDATE $? "Enabling backend"
-echo
 echo =====================================================
+
 systemctl restart backend &>> $LOG_FILE_NAME
 VALIDATE $? "Starting backend"
-
 echo =====================================================
