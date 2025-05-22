@@ -17,7 +17,7 @@ N="\e[0m"
 # Function to validate
 #########################################################
 VALIDATE(){
-    if [ $1 -ne 0]
+    if [ $1 -ne 0 ]
     then
         echo -e "$2 ... $R FAILURE $N"
         exit 1
@@ -27,7 +27,7 @@ VALIDATE(){
 }
 
 CHECK_ROOT(){
-    if [ $USERID -ne 0]
+    if [ $USERID -ne 0 ]
     then
         echo "Error:: You must have sudo access to execute this command"
         exit 1
